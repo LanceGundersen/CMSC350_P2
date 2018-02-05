@@ -1,8 +1,8 @@
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 /*+----------------------------------------------------------------------
  ||
- ||  Class InfixEvaluation
+ ||  Class PosfixMain
  ||
  ||         Author:  Lance Gundersen
  ||
@@ -13,8 +13,8 @@ import javax.swing.*;
 
 class DivideByZeroException extends ArithmeticException {
 
-    DivideByZeroException() {
-        JOptionPane window = new JOptionPane();
-        JOptionPane.showMessageDialog(window, "Sorry, you cannot divide by zero.");
-    }
+  DivideByZeroException() {
+    JOptionPane window = new JOptionPane();
+    JOptionPane.showMessageDialog(window, "Sorry, you cannot divide by zero.");
+  }
 }

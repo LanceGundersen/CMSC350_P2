@@ -1,77 +1,83 @@
-import javax.swing.*;
 import java.awt.event.ActionEvent;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /*=============================================================================
- |   Assignment:  Project 1:  Infix Evaluation of Unsigned Integers
+ |   Assignment:  Project 2:  Three Address Generator
  |       Author:  Lance Gundersen
  |       Grader:  Prof. Lynda Metallo
  |
  |       Course:  CMSC 350
  |   Instructor:  Lynda Metallo
- |     Due Date:  21JAN18
+ |     Due Date:  04FEB18
  |
- |  Description:  A program that evaluates infix expressions of unsigned
- |                integers using two stacks. The program consists of
- |                four classes. The main class creates a GUI that allows the
- |                user input an infix expression and displays the result.
+ |  Description:   a program that accepts an arithmetic
+ |                 expression of unsigned integers in postfix notation and
+ |                 builds the arithmetic expression tree that represents that
+ |                 expression. From that tree, the corresponding fully
+ |                 parenthesized infix expression should be displayed and a
+ |                 file should be generated that contains the three address
+ |                 format instructions.
  |
  |     Language:  Java 9
- |
- | Deficiencies:  The code runs and works as expected but I was unable to
- |                find a way to remove the return 0; on line 60 of the
- |                InfixEvaluation class.
  |
  *===========================================================================*/
 
 public class PostfixMain {
 
-    private JTextField inputField, resultField;
+  private JTextField expressionField;
+  private JTextField resultField = new JTextField("", 20);
 
-    public static void main(String[] args) {
-        PostfixMain postfix = new PostfixMain();
-        postfix.instantiateGUI();
-    }
+  public static void main(String[] args) {
+    PostfixMain postfix = new PostfixMain();
+    postfix.prepareGUI();
+  }
 
-    private void instantiateGUI() {
-        JFrame window = new JFrame("Infix Expression Evaluator");
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  private void prepareGUI() {
+    JFrame mainFrame = new JFrame("Three Address Generator");
+    mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = (JPanel) window.getContentPane();
-        window.setLayout(null);
+    JPanel window = (JPanel) mainFrame.getContentPane();
+    mainFrame.setLayout(null);
 
-        JLabel inputLabel = new JLabel("Enter Infix Expression");
-        inputLabel.setBounds(25, 5, inputLabel.getPreferredSize().width, inputLabel.getPreferredSize().height);
-        panel.add(inputLabel);
+    JLabel promptLabel = new JLabel("Enter Postfix Expression");
+    promptLabel.setBounds(25, 5, promptLabel.getPreferredSize().width,
+        promptLabel.getPreferredSize().height);
+    window.add(promptLabel);
 
-        JLabel resultLabel = new JLabel("Result");
-        resultLabel.setBounds(50, 100, resultLabel.getPreferredSize().width, resultLabel.getPreferredSize().height);
-        panel.add(resultLabel);
+    JLabel resultLabel = new JLabel("Infix Expression");
+    resultLabel.setBounds(50, 100, resultLabel.getPreferredSize().width,
+        resultLabel.getPreferredSize().height);
+    window.add(resultLabel);
 
-        inputField = new JTextField("", 20);
-        inputField.setBounds(175, 5, inputField.getPreferredSize().width, inputField.getPreferredSize().height);
-        panel.add(inputField);
+    expressionField = new JTextField("", 20);
+    expressionField.setBounds(175, 5, expressionField.getPreferredSize().width,
+        expressionField.getPreferredSize().height);
+    window.add(expressionField);
 
-        resultField = new JTextField("", 20);
-        resultField.setBounds(125, 100, resultField.getPreferredSize().width, resultField.getPreferredSize().height);
-        panel.add(resultField);
+    resultField.setBounds(175, 100, resultField.getPreferredSize().width,
+        resultField.getPreferredSize().height);
+    window.add(resultField);
 
-        JButton submitButton = new JButton("Evaluate");
-        submitButton.setBounds(200, 50, submitButton.getPreferredSize().width, submitButton.getPreferredSize().height);
-        submitButton.addActionListener((ActionEvent e) -> {
-            if (!inputField.getText().equals("")) {
-                submitButton();
-            }
-        });
-        panel.add(submitButton);
+    JButton constructButton = new JButton("Construct Tree");
+    constructButton.setBounds(175, 50, constructButton.getPreferredSize().width,
+        constructButton.getPreferredSize().height);
 
-        window.getRootPane().setDefaultButton(submitButton);
-        window.setSize(500, 175);
-        window.setVisible(true);
-    }
+    constructButton.addActionListener((ActionEvent e) ->
+        constructButtonAction());
+    window.add(constructButton);
+    window.getRootPane().setDefaultButton(constructButton);
 
-    private void submitButton() {
-        PostfixEvaluation postfixEvaluation = new PostfixEvaluation();
-        int result = postfixEvaluation.PostfixCalculator(inputField.getText());
-        resultField.setText("" + result);
-    }
+    mainFrame.setSize(500, 175);
+    mainFrame.setVisible(true);
+  }
+
+  private void constructButtonAction() {
+    ExpressionTreeEvaluation expressionTree = new ExpressionTreeEvaluation();
+    expressionTree.create(expressionField.getText());
+    resultField.setText("" + expressionTree.infix());
+  }
 }
